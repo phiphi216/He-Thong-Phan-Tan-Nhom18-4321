@@ -1,0 +1,52 @@
+public class Service : System.Web.Services.WebService
+{
+    public Service () {
+
+        //Uncomment the following line if using designed components 
+        //InitializeComponent(); 
+    }
+
+    private MySqlConnection con = null;
+    private MySqlConnection getConnection()
+    {
+        MySqlConnection con = new MySqlConnection("Server=localhost;Database=qls;Port=3306;User ID=root;Password");
+        return con;
+    }
+    private DataSet getTable(string sql)
+    {
+        MySqlConnection con = getConnection();
+        MysqlDataAdapter da = new MysqlDataAdapter(sql, con);
+        DataSet dt = new DataSet();
+        da.Fill(dt);
+        return dt;
+    }
+    private void ExcutenonQuery(string sql)
+    {
+        MySqlConnection con = getConnection();
+        con.Open();
+        MySqlCommand cmd = new MySqlCommand(sql, con);
+        cmd.ExecuteNonQuery();
+        cmd.Dispose();
+        con.Close();
+    }
+    public DataSet hienthi()
+    {
+        string sql = "select *from quanlysach";
+        return getTable(sql);
+
+    }
+    public void them(string MaSach, string TenSach, string LoaiSach, string SoLuong, string DonGia)
+    {
+        string sql = "insert into quanlysach values('" + MaSach + "','" + TenSach + "','" + LoaiSach + "','" + SoLuong + "','" + DonGia + "')";
+            ExcutenonQuery(sql);
+    }
+    public void sua(string MaSach, string TenSach, string LoaiSach, string SoLuong, string DonGia)
+    {
+        string sql = "update quanlysach set MaSach='" + MaSach + "',TenSach='" + TenSach + "',LoaiSach='" + LoaiSach + "',Soluong='" + SoLuong + "',DonGia='" + DonGia + "', where MaSach='" + MaSach + "'";
+        ExcutenonQuery(sql);
+    }
+    public void xoa(string MaSach)
+
+        string sql = "detele from quanlysach where MaSach= '" + MaSach + "'";
+      ExcutenonQuery(sql);
+}
